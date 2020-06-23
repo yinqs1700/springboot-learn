@@ -15,7 +15,7 @@ public interface EmployeeMapper {
     @Delete("delete from employee where id = #{id}")
     void delEmpById(Integer id);
 
-    @Insert("insert into employee(lastName,email,gender,d_id) values (#{lastName},#{email},#{gender}，#{dId})")
+    @Insert("insert into employee(lastName,email,gender,d_id) values (#{lastName},#{email},#{gender},#{dId})")
     void insertEmp(Employee employee);
 
     @Select("select * from employee where lastName = #{lastName}")

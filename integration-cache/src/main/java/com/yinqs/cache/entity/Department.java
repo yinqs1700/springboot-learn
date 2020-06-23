@@ -1,6 +1,8 @@
 package com.yinqs.cache.entity;
 
-public class Department {
+import java.io.Serializable;
+
+public class Department implements Serializable {
 	
 	private Integer id;
 	private String departmentName;

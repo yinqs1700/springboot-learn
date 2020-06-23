@@ -35,9 +35,9 @@ public class EmployeeService {
      * @param id 传入的员工编号
      * @return emp
      */
-    @Cacheable(cacheNames = {"emp"},/*keyGenerator = "myKeyGenerator"*/key = "#id", condition = "#id>0", unless = "", sync = true)
+    @Cacheable(cacheNames = {"emp"},/*keyGenerator = "myKeyGenerator"*/key = "#root.args[0]", condition = "#id>0", sync = true)
     public Employee getEmp(Integer id) {
-        log.info("获取到员工信息");
+        log.info("---------------获取到员工信息-------------");
         return employeeMapper.getEmpById(id);
     }
 
@@ -66,6 +66,11 @@ public class EmployeeService {
         employeeMapper.delEmpById(id);
     }
 
+    @CacheEvict(value = "emp")
+    public void deleteAllCache(){
+        // do nothing
+    }
+
     @Caching(
             cacheable = {
                     @Cacheable(value = "emp", key = "#lastName")
@@ -81,5 +86,10 @@ public class EmployeeService {
     public Employee getEmployee(String lastName) {
         return employeeMapper.getEmpByLastName(lastName);
     }
+
+    public void add(Employee employee) {
+        employeeMapper.insertEmp(employee);
+    }
+
 
 }

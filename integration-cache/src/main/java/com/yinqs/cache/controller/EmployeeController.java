@@ -2,24 +2,40 @@ package com.yinqs.cache.controller;
 
 import com.yinqs.cache.entity.Employee;
 import com.yinqs.cache.service.EmployeeService;
+import org.redisson.Redisson;
+import org.redisson.RedissonLock;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("emp")
 public class EmployeeController {
+
+
 
     @Autowired
     EmployeeService employeeService;
 
     @GetMapping("{id}")
     public Employee getEmployee(@PathVariable("id") Integer id) {
-
-        return employeeService.getEmp(id);
+        RedissonClient redissonClient = Redisson.create();
+        RLock myLock = redissonClient.getLock("myLock");
+        myLock.lock(10, TimeUnit.SECONDS);
+        try {
+            return employeeService.getEmp(id);
+        }catch (Exception e){
+        }finally {
+            myLock.unlock();
+        }
+        return null;
     }
+
 
     @PostMapping("edit")
     public Map<String, Object> updateEmp(@RequestBody Employee employee) {

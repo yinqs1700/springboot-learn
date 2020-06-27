@@ -25,10 +25,12 @@ public class CacheConfig {
     }
 
 
+
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory factory) {
 
         RedisSerializer<String> redisSerializer = new StringRedisSerializer();
+
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
 
         //解决查询缓存转换异常的问题
